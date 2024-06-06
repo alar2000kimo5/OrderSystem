@@ -1,25 +1,31 @@
-package com.order.OrderSystem.domain.base;
+package com.order.OrderSystem.domain;
 
 import com.order.OrderSystem.domain.type.InComeType;
 import com.order.OrderSystem.domain.type.PriceType;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 
-
-public abstract class BaseOrder {
+@Entity
+@Table(name = "ORDERTABLE")
+public class OrderEntity {
+    @Id
+    private int orderId;
     private InComeType inComeType;// buy or sell
     private int quantity;
     private PriceType priceType;  // market or limit
     private BigDecimal price;
     private Timestamp orderTime;
 
-    public BaseOrder(InComeType inComeType, int quantity, PriceType priceType, BigDecimal price, Timestamp orderTime) {
-        this.inComeType = inComeType;
-        this.quantity = quantity;
-        this.priceType = priceType;
-        this.price = price;
-        this.orderTime = orderTime;
+    public int getOrderId() {
+        return orderId;
+    }
+
+    public void setOrderId(int orderId) {
+        this.orderId = orderId;
     }
 
     public InComeType getInComeType() {
@@ -60,16 +66,5 @@ public abstract class BaseOrder {
 
     public void setOrderTime(Timestamp orderTime) {
         this.orderTime = orderTime;
-    }
-
-    @Override
-    public String toString() {
-        return "BaseOrder{" +
-                "inComeType=" + inComeType +
-                ", quantity=" + quantity +
-                ", priceType=" + priceType +
-                ", price=" + price +
-                ", orderTime=" + orderTime +
-                '}';
     }
 }

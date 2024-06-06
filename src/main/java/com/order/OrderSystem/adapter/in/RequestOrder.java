@@ -1,25 +1,29 @@
-package com.order.OrderSystem.domain.base;
+package com.order.OrderSystem.adapter.in;
 
+import com.order.OrderSystem.domain.Order;
 import com.order.OrderSystem.domain.type.InComeType;
 import com.order.OrderSystem.domain.type.PriceType;
+import org.mapstruct.factory.Mappers;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 
-
-public abstract class BaseOrder {
+public class RequestOrder implements BaseMapper<Order> {
+    private String userName;
     private InComeType inComeType;// buy or sell
     private int quantity;
     private PriceType priceType;  // market or limit
     private BigDecimal price;
     private Timestamp orderTime;
 
-    public BaseOrder(InComeType inComeType, int quantity, PriceType priceType, BigDecimal price, Timestamp orderTime) {
-        this.inComeType = inComeType;
-        this.quantity = quantity;
-        this.priceType = priceType;
-        this.price = price;
-        this.orderTime = orderTime;
+    final static OrderMaper mapper = Mappers.getMapper(OrderMaper.class);
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
     public InComeType getInComeType() {
@@ -63,13 +67,7 @@ public abstract class BaseOrder {
     }
 
     @Override
-    public String toString() {
-        return "BaseOrder{" +
-                "inComeType=" + inComeType +
-                ", quantity=" + quantity +
-                ", priceType=" + priceType +
-                ", price=" + price +
-                ", orderTime=" + orderTime +
-                '}';
+    public Order toObj() {
+        return mapper.requestToOrder(this);
     }
 }

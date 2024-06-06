@@ -1,7 +1,8 @@
 package com.order.OrderSystem;
 
-import com.order.OrderSystem.domain.OrderByTime;
-import com.order.OrderSystem.domain.OrderEngineByTime;
+import com.order.OrderSystem.application.in.OrderUseCase;
+import com.order.OrderSystem.application.out.OrderRepository;
+import com.order.OrderSystem.domain.Order;
 import com.order.OrderSystem.domain.type.InComeType;
 import com.order.OrderSystem.domain.type.PriceType;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,7 @@ import java.math.BigDecimal;
 import java.sql.*;
 import java.util.List;
 import java.util.Random;
+import java.util.UUID;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -32,15 +34,18 @@ public class OrderSystemApplication {
     }
 
     @Component
-    public class UrlPrinter {
+    public class ReadyAndRun {
 
         @Autowired
-        OrderEngineByTime orderEngineByTime;
+        OrderUseCase orderUseCase;
+
+        @Autowired
+        OrderRepository orderRepository;
 
         @EventListener(ApplicationReadyEvent.class)
         public void onApplicationReady(ApplicationReadyEvent event) {
             ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
-            ExecutorService server = Executors.newFixedThreadPool(2);
+            ExecutorService server = Executors.newFixedThreadPool(10);
             try {
                 AtomicBoolean run = new AtomicBoolean(true);
                 long durationInSeconds = 1; // 執行時間 1 秒
@@ -48,14 +53,7 @@ public class OrderSystemApplication {
                 //while (run.get()) {
                 for (int i = 0; i < 100; i++) {
                     server.execute(() -> {
-                        OrderByTime order = createOrder();
-                        if (order.getInComeType() == InComeType.BUY) {
-                            System.out.println("buy:" + order);
-                            orderEngineByTime.putBuy(order);
-                        } else {
-                            System.out.println("sell:" + order);
-                            orderEngineByTime.putSell(order);
-                        }
+                        System.out.println(orderUseCase.submit(createOrder()));
                     });
                 }
 
@@ -66,7 +64,7 @@ public class OrderSystemApplication {
                 boolean stop = server.awaitTermination(2, TimeUnit.SECONDS); // 等待最多 1秒
                 if (stop) {
                     System.out.println("-------------main to match order------------------");
-                    List<OrderByTime> orderList = orderEngineByTime.matchOrder();
+                    List<Order> orderList = orderRepository.findAll();
                     orderList.forEach(System.out::println);
                     System.out.println("finish");
                 }
@@ -75,15 +73,17 @@ public class OrderSystemApplication {
             }
         }
 
-        public OrderByTime createOrder() {
+        public Order createOrder() {
             Random random = new Random();
-            return new OrderByTime(
-                    InComeType.values()[random.nextInt(InComeType.values().length)], //
+
+            Order order = new Order(InComeType.values()[random.nextInt(InComeType.values().length)], //
                     random.nextInt(10) + 1, // 1-100
                     PriceType.values()[random.nextInt(PriceType.values().length)], //
                     BigDecimal.valueOf(random.nextInt(10) + 1), // 0-100
                     new Timestamp(System.currentTimeMillis()) //
             );
+            order.setUserName(UUID.randomUUID().toString().replace("-", "").substring(0, 8));
+            return order;
         }
     }
 
@@ -91,6 +91,7 @@ public class OrderSystemApplication {
         try {
             Connection conn = DriverManager.getConnection("jdbc:h2:mem:test", "sa", "password");
             Statement stmt = conn.createStatement();
+            stmt.execute("CREATE TABLE IF NOT EXISTS ORDERTABLE ( orderId INT PRIMARY KEY , inComeType VARCHAR(10)  , quantity INT  , priceType VARCHAR(10),price DECIMAL(15, 2) , orderTime TIMESTAMP )");
             stmt.execute("CREATE TABLE IF NOT EXISTS test (id INT PRIMARY KEY, name VARCHAR(255))");
             stmt.execute("INSERT INTO TEST (id, name) VALUES (1, 'New Order')");
             ResultSet rs = stmt.executeQuery("SELECT * FROM test");

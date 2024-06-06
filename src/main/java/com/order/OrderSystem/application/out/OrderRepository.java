@@ -1,12 +1,11 @@
 package com.order.OrderSystem.application.out;
 
-import com.order.OrderSystem.domain.TestEntity;
-
 import java.util.List;
-import java.util.Optional;
 
-public interface OrderRepository {
+public interface OrderRepository<T> {
 
 
-    List<TestEntity> findAll();
+    List<T> findAll();
+
+    void saveMatchOrder(List<T> order);
 }
