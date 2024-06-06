@@ -14,6 +14,8 @@ public abstract class BaseOrder {
     private BigDecimal price;
     private Timestamp orderTime;
 
+    public BaseOrder() {
+    }
     public BaseOrder(InComeType inComeType, int quantity, PriceType priceType, BigDecimal price, Timestamp orderTime) {
         this.inComeType = inComeType;
         this.quantity = quantity;

@@ -24,6 +24,13 @@ README file
 ## 設計
 
 
+## Redis
+使用dockerDesktop 安裝redis
+docker exec -it redis redis-cli
+LRANGE orderQueue 0 -1
+
+
+
 
 
 
