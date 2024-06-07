@@ -21,7 +21,14 @@ public class RedisQueueServiceImpl implements RedisQueueService<Order> {
     }
 
     @Override
+    public void enqueueAll(List<Order> items) {
+        redisOrderTemplate.opsForList().leftPushAll(QUEUE_NAME, items.toArray(new Order[0]));
+    }
+
+    @Override
     public List<Order> dequeue() {
-        return redisOrderTemplate.opsForList().range(QUEUE_NAME, 0, -1);
+        List<Order> orders = redisOrderTemplate.opsForList().range(QUEUE_NAME, 0, -1);
+        redisOrderTemplate.opsForList().trim(QUEUE_NAME, 1, 0);  // 清空
+        return orders;
     }
 }

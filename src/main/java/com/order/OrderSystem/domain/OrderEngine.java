@@ -30,19 +30,22 @@ public class OrderEngine implements MatchOrder {
     public void matchOrder() {
         Runnable matchRunner = () -> {
             List<Order> orders = redisQueueService.dequeue();
-            System.out.println("=============================" +orders);
+            System.out.println("=============================" + orders);
             Collections.sort(orders, Comparator.comparing(Order::getOrderTime));
-            matchAndSave(orders);
+            List nonMatchOrders = matchAndSave(orders);
+            // 寫回redis queue
+            redisQueueService.enqueueAll(nonMatchOrders);
         };
         redisLockService.lockAndDo(matchRunner);
     }
 
-    private void matchAndSave(List<Order> orders) {
+    public List<Order> matchAndSave(List<Order> orders) {
         List<Order> matchedOrders = new ArrayList<>();
         orders.forEach(order -> {
             if (!matchedOrders.contains(order)) {
                 List<Order> matched = orders.stream()
-                        .filter(matchOrder -> !matchedOrders.contains(matchOrder) && isMatched(order, matchOrder)).toList();
+                        .filter(matchOrder -> !matchedOrders.contains(matchOrder)
+                                && isMatched(order, matchOrder)).toList();
 
                 if (!matched.isEmpty()) {
                     Order matchedOrder = matched.get(0);
@@ -55,9 +58,10 @@ public class OrderEngine implements MatchOrder {
         });
 
         orders.removeAll(matchedOrders);
+        return orders;
     }
 
-    private boolean isMatched(Order order1, Order order2) {
+    public boolean isMatched(Order order1, Order order2) {
         if (order1.getInComeType() == order2.getInComeType()) {
             return false;
         }
