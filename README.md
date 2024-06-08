@@ -25,14 +25,18 @@ README file
 ![image](https://github.com/alar2000kimo5/OrderSystem/assets/79575202/1f46f856-9547-4c5c-8076-3524e1eeae67)
 
 # 資料流程
-![image](https://github.com/alar2000kimo5/OrderSystem/assets/79575202/0657742b-841d-4b15-b949-4e19141eeb8a)
+![image](https://github.com/alar2000kimo5/OrderSystem/assets/79575202/549833e4-9124-4f7c-b9c2-18c506ec1c53)
+
+
+
+
 
 
 
 # Redis
 使用dockerDesktop 安裝redis
 docker exec -it redis redis-cli
-LRANGE orderQueue 0 -1
+Zrange orderQueue30 0 -1 withscores
 
 
 
