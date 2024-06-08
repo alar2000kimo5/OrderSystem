@@ -1,7 +1,8 @@
 package com.order.OrderSystem;
 
 import com.order.OrderSystem.adapter.out.jpa.OrderJpa;
-import com.order.OrderSystem.domain.TestEntity;
+import com.order.OrderSystem.domain.MatchOrderEntity;
+import com.order.OrderSystem.domain.Order;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,18 +20,19 @@ class BaseOrderSystemApplicationTests {
 	@Test
 	void contextLoads() {
 		//arrange
-		TestEntity testEntity = new TestEntity();
-		testEntity.setId(2);
-		testEntity.setName("alan");
+		Order buy = new Order();
+		Order sell = new Order();
+		MatchOrderEntity testEntity = new MatchOrderEntity(buy,sell);
+		testEntity.setBuyUserName("alan");
 		orderRepository.save(testEntity);
 		//action
-		Iterable<TestEntity> dataList = orderRepository.findAll();
+		Iterable<MatchOrderEntity> dataList = orderRepository.findAll();
 		//assert
-		List<TestEntity> list = StreamSupport
+		List<MatchOrderEntity> list = StreamSupport
 				.stream(dataList.spliterator(), false).toList();
 		Assertions.assertEquals(1,list.size());
-		Assertions.assertEquals(2,list.get(0).getId());
-		Assertions.assertEquals("alan",list.get(0).getName());
+		Assertions.assertEquals(1,list.get(0).getOrderId());
+		Assertions.assertEquals("alan",list.get(0).getBuyUserName());
 
 	}
 

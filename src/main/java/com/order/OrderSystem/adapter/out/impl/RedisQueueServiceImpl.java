@@ -6,29 +6,33 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
+import java.util.Set;
 
 @Component
 public class RedisQueueServiceImpl implements RedisQueueService<Order> {
 
     @Autowired
     private RedisTemplate<String, Order> redisOrderTemplate;
-    private static final String QUEUE_NAME = "orderQueue";
 
     @Override
-    public void enqueue(Order item) {
-        redisOrderTemplate.opsForList().leftPush(QUEUE_NAME, item);
+    public void addToZSet(String key, Order value, double score) {
+        redisOrderTemplate.opsForZSet().add(key, value, score);
     }
 
     @Override
-    public void enqueueAll(List<Order> items) {
-        redisOrderTemplate.opsForList().leftPushAll(QUEUE_NAME, items.toArray(new Order[0]));
+    public Set<Order> getAllOrdersFromZset(String queueName){
+        return redisOrderTemplate.opsForZSet().range(queueName, 0, -1);
     }
 
+    // 刪除 ZSet 中的元素
     @Override
-    public List<Order> dequeue() {
-        List<Order> orders = redisOrderTemplate.opsForList().range(QUEUE_NAME, 0, -1);
-        redisOrderTemplate.opsForList().trim(QUEUE_NAME, 1, 0);  // 清空
-        return orders;
+    public void removeFromZSet(String key, Order value) {
+        Long result = redisOrderTemplate.opsForZSet().remove(key, value);
+        if (result != null && result > 0) {
+            System.out.println("Successfully removed the value from ZSet.");
+        } else {
+            System.out.println("Failed to remove the value from ZSet or value not found.");
+        }
     }
+
 }

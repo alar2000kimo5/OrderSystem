@@ -3,11 +3,12 @@ package com.order.OrderSystem.domain.base;
 import com.order.OrderSystem.domain.type.InComeType;
 import com.order.OrderSystem.domain.type.PriceType;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 
 
-public abstract class BaseOrder {
+public abstract class BaseOrder implements Serializable {
     private InComeType inComeType;// buy or sell
     private int quantity;
     private PriceType priceType;  // market or limit

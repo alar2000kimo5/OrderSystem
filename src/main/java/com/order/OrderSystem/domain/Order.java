@@ -30,6 +30,7 @@ public class Order extends BaseOrder {
     public String toString() {
         return "Order{" +
                 "userName='" + userName + '\'' +
+                super.toString() +
                 '}';
     }
 }

@@ -1,5 +1,6 @@
 package com.order.OrderSystem.domain;
 
+import com.order.OrderSystem.application.in.OrderUseCase;
 import com.order.OrderSystem.application.out.OrderRepository;
 import com.order.OrderSystem.application.out.RedisLockService;
 import com.order.OrderSystem.application.out.RedisQueueService;
@@ -8,9 +9,10 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
+import java.util.Set;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 @Component
 public class OrderEngine implements MatchOrder {
@@ -25,21 +27,25 @@ public class OrderEngine implements MatchOrder {
     @Autowired
     RedisLockService redisLockService;
 
+    Executor executor = Executors.newFixedThreadPool(3);
+
     @Scheduled(fixedRate = 1000)
     @Override
     public void matchOrder() {
-        Runnable matchRunner = () -> {
-            List<Order> orders = redisQueueService.dequeue();
-            System.out.println("=============================" + orders);
-            Collections.sort(orders, Comparator.comparing(Order::getOrderTime));
-            List nonMatchOrders = matchAndSave(orders);
-            // 寫回redis queue
-            redisQueueService.enqueueAll(nonMatchOrders);
-        };
-        redisLockService.lockAndDo(matchRunner);
+        executor.execute(runMather(OrderUseCase.QUEUE_NAME_30));
+        executor.execute(runMather(OrderUseCase.QUEUE_NAME_60));
+        executor.execute(runMather(OrderUseCase.QUEUE_NAME_end));
     }
 
-    public List<Order> matchAndSave(List<Order> orders) {
+    private Runnable runMather(String key) {
+        return () -> {
+            Runnable matchRunner = () ->
+                    matchAndSave(key, redisQueueService.getAllOrdersFromZset(key));
+            redisLockService.lockAndDo(key, matchRunner);
+        };
+    }
+
+    public void matchAndSave(String key, Set<Order> orders) {
         List<Order> matchedOrders = new ArrayList<>();
         orders.forEach(order -> {
             if (!matchedOrders.contains(order)) {
@@ -49,16 +55,13 @@ public class OrderEngine implements MatchOrder {
 
                 if (!matched.isEmpty()) {
                     Order matchedOrder = matched.get(0);
-                    orderRepository.saveMatchOrder(new MatchOrderEntity(order, matchedOrder));
-                    //System.out.println("Matched order: " + order + " with " + matchedOrder);
+                    orderRepository.saveMatchOrder(new MatchOrderEntity(order, matchedOrder)); //寫入db
+                    redisQueueService.removeFromZSet(key, matchedOrder); // 刪除queue上的資料
                     matchedOrders.add(order);
                     matchedOrders.add(matchedOrder);
                 }
             }
         });
-
-        orders.removeAll(matchedOrders);
-        return orders;
     }
 
     public boolean isMatched(Order order1, Order order2) {

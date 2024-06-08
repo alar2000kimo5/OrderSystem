@@ -40,12 +40,15 @@ public class OrderSystemApplication {
         @Autowired
         OrderRepository orderRepository;
 
+        ExecutorService server = Executors.newFixedThreadPool(2);
+
         @EventListener(ApplicationReadyEvent.class)
         public void onApplicationReady(ApplicationReadyEvent event) {
-            ExecutorService server = Executors.newFixedThreadPool(2);
+
             try {
+                System.out.println("abc");
                 // run random order
-                for (int i = 0; i < 10; i++) {
+                for (int i = 0; i < 20; i++) {
                     server.execute(() -> {
                         Order order = createOrder();
                         System.out.println(order);
