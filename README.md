@@ -17,13 +17,15 @@ README file
 ## 目錄
 
 - [設計架檔](#設計架構)
-- [使用](#使用)
+- [資料流程](#資料流程)
 - [功能](#功能)
 - [Redis](#Redis)
 
 # 設計架構
 ![image](https://github.com/alar2000kimo5/OrderSystem/assets/79575202/1f46f856-9547-4c5c-8076-3524e1eeae67)
 
+# 資料流程
+![image](https://github.com/alar2000kimo5/OrderSystem/assets/79575202/0657742b-841d-4b15-b949-4e19141eeb8a)
 
 
 
