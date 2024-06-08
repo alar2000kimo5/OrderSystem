@@ -21,7 +21,7 @@ README file
 - [功能](#功能)
 - [聯繫信息](#聯繫信息)
 
-## 設計
+## 設計架構
 ![image](https://github.com/alar2000kimo5/OrderSystem/assets/79575202/9af33b46-51c4-4303-99cc-4db2a20a186e)
 
 
