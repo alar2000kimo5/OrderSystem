@@ -36,7 +36,7 @@ README file
 # Redis
 使用dockerDesktop 安裝redis
 docker exec -it redis redis-cli
-LRANGE orderQueue 0 -1
+Zrange orderQueue30 0 -1 withscores
 
 
 
