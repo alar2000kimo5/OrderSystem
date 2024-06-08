@@ -22,7 +22,8 @@ README file
 - [Redis](#Redis)
 
 # 設計架構
-![image](https://github.com/alar2000kimo5/OrderSystem/assets/79575202/9af33b46-51c4-4303-99cc-4db2a20a186e)
+![image](https://github.com/alar2000kimo5/OrderSystem/assets/79575202/08b72433-2ae4-4dca-bcad-68c7d85f01da)
+
 
 
 # Redis
