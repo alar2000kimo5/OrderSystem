@@ -11,9 +11,6 @@ public class Order extends BaseOrder {
 
     String userName;
 
-    public Order(){
-
-    }
     public Order(InComeType inComeType, int quantity, PriceType priceType, BigDecimal price, Timestamp orderTime) {
         super(inComeType, quantity, priceType, price, orderTime);
     }

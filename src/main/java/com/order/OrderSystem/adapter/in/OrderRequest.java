@@ -10,7 +10,7 @@ import org.mapstruct.factory.Mappers;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 
-public class RequestOrder implements BaseMapper<Order> {
+public class OrderRequest implements BaseMapper<Order> {
     private String userName;
     private InComeType inComeType;// buy or sell
     private int quantity;

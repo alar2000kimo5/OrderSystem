@@ -25,8 +25,8 @@ public class OrderController {
     }
 
     @PostMapping("/order")
-    public String order(RequestOrder requestOrder) {
-        return orderUseCase.submit(requestOrder.toObj());
+    public String order(OrderRequest orderRequest) {
+        return orderUseCase.submit(orderRequest.toObj());
     }
 
 

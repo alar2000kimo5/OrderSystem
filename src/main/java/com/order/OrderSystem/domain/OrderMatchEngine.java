@@ -15,7 +15,7 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
 @Component
-public class OrderEngine implements MatchOrder {
+public class OrderMatchEngine implements MatchEngine<Order,Order> {
 
     // redis
     @Autowired
@@ -30,12 +30,23 @@ public class OrderEngine implements MatchOrder {
     Executor executor = Executors.newFixedThreadPool(3);
 
     @Scheduled(fixedRate = 1000)
-    @Override
-    public void matchOrder() {
+    public void scheduler() {
         executor.execute(runMather(OrderUseCase.QUEUE_NAME_30));
         executor.execute(runMather(OrderUseCase.QUEUE_NAME_60));
         executor.execute(runMather(OrderUseCase.QUEUE_NAME_end));
     }
+
+    @Override
+    public boolean isMatch(Order obj1, Order obj2) {
+        if (obj1.getInComeType() == obj2.getInComeType()) {
+            return false;
+        }
+
+        return obj1.getQuantity() == obj2.getQuantity()
+                && obj1.getPriceType().equals(obj2.getPriceType())
+                && obj1.getPrice().equals(obj2.getPrice());
+    }
+
 
     private Runnable runMather(String key) {
         return () -> {
@@ -51,11 +62,11 @@ public class OrderEngine implements MatchOrder {
             if (!matchedOrders.contains(order)) {
                 List<Order> matched = orders.stream()
                         .filter(matchOrder -> !matchedOrders.contains(matchOrder)
-                                && isMatched(order, matchOrder)).toList();
+                                && isMatch(order, matchOrder)).toList();
 
                 if (!matched.isEmpty()) {
                     Order matchedOrder = matched.get(0);
-                    orderRepository.saveMatchOrder(new MatchOrderEntity(order, matchedOrder)); //寫入db
+                    orderRepository.saveMatchOrder(new OrderMatchEntity(order, matchedOrder)); //寫入db
                     redisQueueService.removeFromZSet(key, order);
                     redisQueueService.removeFromZSet(key, matchedOrder); // 刪除queue上的資料
                     matchedOrders.add(order);
@@ -63,15 +74,5 @@ public class OrderEngine implements MatchOrder {
                 }
             }
         });
-    }
-
-    public boolean isMatched(Order order1, Order order2) {
-        if (order1.getInComeType() == order2.getInComeType()) {
-            return false;
-        }
-
-        return order1.getQuantity() == order2.getQuantity()
-                && order1.getPriceType().equals(order2.getPriceType())
-                && order1.getPrice().equals(order2.getPrice());
     }
 }

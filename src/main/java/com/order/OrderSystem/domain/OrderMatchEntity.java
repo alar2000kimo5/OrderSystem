@@ -8,7 +8,7 @@ import java.sql.Timestamp;
 
 @Entity
 @Table(name = "ORDERTABLE")
-public class MatchOrderEntity {
+public class OrderMatchEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int orderId;
@@ -20,10 +20,10 @@ public class MatchOrderEntity {
     private String buyUserName; // 匹配買家名稱
     private String sellUserName; // 匹配賣家名稱
 
-    private MatchOrderEntity() {
+    private OrderMatchEntity() {
     }
 
-    public MatchOrderEntity(Order buy, Order sell) {
+    public OrderMatchEntity(Order buy, Order sell) {
         setBuyOrderTime(buy.getOrderTime());
         setBuyUserName(buy.getUserName());
         setSellOrderTime(sell.getOrderTime());
