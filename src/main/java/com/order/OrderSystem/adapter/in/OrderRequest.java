@@ -2,7 +2,7 @@ package com.order.OrderSystem.adapter.in;
 
 import com.order.OrderSystem.adapter.in.mapper.BaseMapper;
 import com.order.OrderSystem.adapter.in.mapper.OrderMaper;
-import com.order.OrderSystem.domain.Order;
+import com.order.OrderSystem.application.engine.Order;
 import com.order.OrderSystem.domain.type.InComeType;
 import com.order.OrderSystem.domain.type.PriceType;
 import org.mapstruct.factory.Mappers;

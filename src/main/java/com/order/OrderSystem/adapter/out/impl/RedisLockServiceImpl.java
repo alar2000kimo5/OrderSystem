@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 import java.time.Duration;
 
 @Component
-public class RedisLockServiceImpl implements RedisLockService<Runnable> {
+public class RedisLockServiceImpl implements RedisLockService<Runnable, Void> {
 
     @Autowired
     private RedisTemplate<String, String> redisLockTemplate;
@@ -16,18 +16,17 @@ public class RedisLockServiceImpl implements RedisLockService<Runnable> {
     private static final String LOCK = "lock";
 
     @Override
-    public void lockAndDo(String key , Runnable runnable) {
+    public Void lockAndDo(String key, Runnable runnable) {
         while (true) {
             // 在 Redis 中設置一個鎖，key 為 lockKey，value 為任意值，並設置過期時間
-            Boolean lockAcquired = redisLockTemplate.opsForValue().setIfAbsent(key+LOCK, "value", Duration.ofSeconds(2));
+            Boolean lockAcquired = redisLockTemplate.opsForValue().setIfAbsent(key + LOCK, "value", Duration.ofSeconds(2));
             if (Boolean.TRUE.equals(lockAcquired)) {
                 try {
                     // 在這裡執行需要同步訪問的代碼
                     runnable.run();
-                    // 如果這段代碼執行成功，可以使用 break; 來退出循環
                 } finally {
                     // 無論代碼執行成功與否，都需要釋放鎖
-                    redisLockTemplate.delete(key+LOCK);
+                    redisLockTemplate.delete(key + LOCK);
                 }
             }
         }

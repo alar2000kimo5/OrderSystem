@@ -1,5 +1,6 @@
 package com.order.OrderSystem.domain;
 
+import com.order.OrderSystem.application.engine.Order;
 import com.order.OrderSystem.domain.type.PriceType;
 import jakarta.persistence.*;
 

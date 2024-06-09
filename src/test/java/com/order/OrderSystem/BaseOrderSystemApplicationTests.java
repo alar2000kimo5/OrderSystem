@@ -2,7 +2,7 @@ package com.order.OrderSystem;
 
 import com.order.OrderSystem.adapter.out.jpa.OrderJpa;
 import com.order.OrderSystem.domain.OrderMatchEntity;
-import com.order.OrderSystem.domain.Order;
+import com.order.OrderSystem.application.engine.Order;
 import com.order.OrderSystem.domain.type.InComeType;
 import com.order.OrderSystem.domain.type.PriceType;
 import org.junit.jupiter.api.Assertions;

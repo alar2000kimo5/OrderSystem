@@ -2,7 +2,7 @@ package com.order.OrderSystem;
 
 import com.order.OrderSystem.application.in.OrderUseCase;
 import com.order.OrderSystem.application.out.OrderRepository;
-import com.order.OrderSystem.domain.Order;
+import com.order.OrderSystem.application.engine.Order;
 import com.order.OrderSystem.domain.type.InComeType;
 import com.order.OrderSystem.domain.type.PriceType;
 import org.springframework.beans.factory.annotation.Autowired;

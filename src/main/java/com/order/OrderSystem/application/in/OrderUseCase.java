@@ -1,11 +1,14 @@
 package com.order.OrderSystem.application.in;
 
-import com.order.OrderSystem.application.out.RedisQueueService;
-import com.order.OrderSystem.domain.Order;
+import com.order.OrderSystem.application.out.RedisQueueZSetService;
+import com.order.OrderSystem.application.engine.Order;
+import com.order.OrderSystem.domain.RedisService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
+import java.util.Arrays;
+import java.util.List;
 
 import static java.math.BigDecimal.valueOf;
 
@@ -14,7 +17,7 @@ public class OrderUseCase implements UseCase<Order, String>{
 
     // redis queue
     @Autowired
-    RedisQueueService redisQueueService;
+    RedisQueueZSetService redisQueueZSetService;
 
     public static final String QUEUE_NAME_30 = "orderQueue30";
     public static final String QUEUE_NAME_60 = "orderQueue60";
@@ -25,14 +28,24 @@ public class OrderUseCase implements UseCase<Order, String>{
         // send to redis queue
         BigDecimal price = order.getPrice();
         if(price.compareTo(valueOf(33)) < 0){
-            redisQueueService.addToZSet(QUEUE_NAME_30,order,order.getOrderTime().getTime());
+            redisQueueZSetService.addToZSet(QUEUE_NAME_30,order,order.getOrderTime().getTime());
         } else if(price.compareTo(valueOf(66)) < 0){
-            redisQueueService.addToZSet(QUEUE_NAME_60,order,order.getOrderTime().getTime());
+            redisQueueZSetService.addToZSet(QUEUE_NAME_60,order,order.getOrderTime().getTime());
         } else {
-            redisQueueService.addToZSet(QUEUE_NAME_end,order,order.getOrderTime().getTime());
+            redisQueueZSetService.addToZSet(QUEUE_NAME_end,order,order.getOrderTime().getTime());
         }
 
         //redisQueueService.enqueue(order);
         return "user : " + order.getUserName() + " orderTime : " + order.getOrderTime();
+    }
+
+    @Override
+    public List<String> getQueueNames() {
+        return Arrays.asList(QUEUE_NAME_30,QUEUE_NAME_60,QUEUE_NAME_end);
+    }
+
+    @Override
+    public RedisService getRedisService() {
+        return redisQueueZSetService;
     }
 }
