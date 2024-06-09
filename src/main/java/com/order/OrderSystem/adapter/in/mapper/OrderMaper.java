@@ -1,5 +1,6 @@
-package com.order.OrderSystem.adapter.in;
+package com.order.OrderSystem.adapter.in.mapper;
 
+import com.order.OrderSystem.adapter.in.RequestOrder;
 import com.order.OrderSystem.domain.Order;
 import org.mapstruct.Mapper;
 

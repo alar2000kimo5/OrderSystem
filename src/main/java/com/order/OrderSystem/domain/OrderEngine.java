@@ -40,7 +40,7 @@ public class OrderEngine implements MatchOrder {
     private Runnable runMather(String key) {
         return () -> {
             Runnable matchRunner = () ->
-                    matchAndSave(key, redisQueueService.getAllOrdersFromZset(key));
+                    matchAndSave(key, redisQueueService.getAllObjectsFromZset(key));
             redisLockService.lockAndDo(key, matchRunner);
         };
     }
@@ -56,6 +56,7 @@ public class OrderEngine implements MatchOrder {
                 if (!matched.isEmpty()) {
                     Order matchedOrder = matched.get(0);
                     orderRepository.saveMatchOrder(new MatchOrderEntity(order, matchedOrder)); //寫入db
+                    redisQueueService.removeFromZSet(key, order);
                     redisQueueService.removeFromZSet(key, matchedOrder); // 刪除queue上的資料
                     matchedOrders.add(order);
                     matchedOrders.add(matchedOrder);

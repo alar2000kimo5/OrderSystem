@@ -20,19 +20,14 @@ public class RedisQueueServiceImpl implements RedisQueueService<Order> {
     }
 
     @Override
-    public Set<Order> getAllOrdersFromZset(String queueName){
+    public Set<Order> getAllObjectsFromZset(String queueName){
         return redisOrderTemplate.opsForZSet().range(queueName, 0, -1);
     }
 
     // 刪除 ZSet 中的元素
     @Override
     public void removeFromZSet(String key, Order value) {
-        Long result = redisOrderTemplate.opsForZSet().remove(key, value);
-        if (result != null && result > 0) {
-            System.out.println("Successfully removed the value from ZSet.");
-        } else {
-            System.out.println("Failed to remove the value from ZSet or value not found.");
-        }
+       redisOrderTemplate.opsForZSet().remove(key, value);
     }
 
 }
