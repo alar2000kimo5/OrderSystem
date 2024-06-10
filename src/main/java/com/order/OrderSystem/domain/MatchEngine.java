@@ -1,8 +1,6 @@
 package com.order.OrderSystem.domain;
 
-import com.order.OrderSystem.application.in.UseCase;
 import com.order.OrderSystem.application.out.RedisLockService;
-import com.order.OrderSystem.domain.base.BaseOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.scheduling.annotation.Scheduled;

@@ -1,4 +1,4 @@
-package com.order.OrderSystem.domain.base;
+package com.order.OrderSystem.domain;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;

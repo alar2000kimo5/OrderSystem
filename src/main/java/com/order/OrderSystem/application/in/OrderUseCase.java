@@ -2,6 +2,7 @@ package com.order.OrderSystem.application.in;
 
 import com.order.OrderSystem.application.engine.Order;
 import com.order.OrderSystem.application.out.RedisQueueZSetService;
+import com.order.OrderSystem.domain.UseCase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -12,7 +13,7 @@ import java.util.List;
 import static java.math.BigDecimal.valueOf;
 
 @Component
-public class OrderUseCase implements UseCase<Order, String>{
+public class OrderUseCase implements UseCase<Order, String> {
 
     // redis queue
     @Autowired

@@ -2,7 +2,7 @@ package com.order.OrderSystem.application.engine;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.order.OrderSystem.domain.base.BaseOrder;
+import com.order.OrderSystem.domain.BaseOrder;
 import com.order.OrderSystem.domain.type.InComeType;
 import com.order.OrderSystem.domain.type.PriceType;
 

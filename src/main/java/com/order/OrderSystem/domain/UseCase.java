@@ -1,4 +1,4 @@
-package com.order.OrderSystem.application.in;
+package com.order.OrderSystem.domain;
 
 import java.util.List;
 
