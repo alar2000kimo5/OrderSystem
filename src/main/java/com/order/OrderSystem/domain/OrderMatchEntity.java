@@ -22,7 +22,7 @@ public class OrderMatchEntity {
     private String buyUserName; // 匹配買家名稱
     private String sellUserName; // 匹配賣家名稱
 
-    private OrderMatchEntity() {
+    protected OrderMatchEntity() {
     }
 
     public OrderMatchEntity(Order order1, Order order2) {
