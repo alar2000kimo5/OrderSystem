@@ -1,5 +1,5 @@
 package com.order.OrderSystem.adapter.in.mapper;
 
-public interface BaseMapper<T> {
+public interface BaseRequest<T> {
     T toObj();
 }

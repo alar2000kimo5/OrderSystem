@@ -1,6 +1,6 @@
 package com.order.OrderSystem.adapter.in;
 
-import com.order.OrderSystem.adapter.in.mapper.BaseMapper;
+import com.order.OrderSystem.adapter.in.mapper.BaseRequest;
 import com.order.OrderSystem.adapter.in.mapper.OrderMaper;
 import com.order.OrderSystem.application.engine.Order;
 import com.order.OrderSystem.domain.type.InComeType;
@@ -10,7 +10,7 @@ import org.mapstruct.factory.Mappers;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 
-public class OrderRequest implements BaseMapper<Order> {
+public class OrderRequest implements BaseRequest<Order> {
     private String userName;
     private InComeType inComeType;// buy or sell
     private int quantity;
