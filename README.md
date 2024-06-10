@@ -18,7 +18,7 @@ README file
 
 - [設計架檔](#設計架構)
 - [資料流程](#資料流程)
-- [功能](#功能)
+- [Class UML](#CLASS UML)
 - [Redis](#Redis)
 
 # 設計架構
@@ -27,12 +27,8 @@ README file
 # 資料流程
 ![image](https://github.com/alar2000kimo5/OrderSystem/assets/79575202/69f8cdcf-1fa8-4abc-baae-eba3675834c5)
 
-
-
-
-
-
-
+# CLASS UML
+![OrderSystemUML](https://github.com/alar2000kimo5/OrderSystem/assets/79575202/aceb8f19-4df4-4fc6-95ed-4cdb68aa0e66)
 
 # Redis
 使用dockerDesktop 安裝redis
