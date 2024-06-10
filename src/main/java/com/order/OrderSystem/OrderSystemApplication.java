@@ -3,6 +3,7 @@ package com.order.OrderSystem;
 import com.order.OrderSystem.application.in.OrderUseCase;
 import com.order.OrderSystem.application.out.OrderRepository;
 import com.order.OrderSystem.application.engine.Order;
+import com.order.OrderSystem.domain.OrderMatchEntity;
 import com.order.OrderSystem.domain.type.InComeType;
 import com.order.OrderSystem.domain.type.PriceType;
 import org.slf4j.Logger;
@@ -44,12 +45,12 @@ public class OrderSystemApplication {
         @Autowired
         OrderUseCase orderUseCase;
         @Autowired
-        OrderRepository orderRepository;
+        OrderRepository<OrderMatchEntity> orderRepository;
 
         ExecutorService server = Executors.newFixedThreadPool(2);
 
         //價格範圍
-        int priceScope = 100;
+        int priceScope = 10;
         @EventListener(ApplicationReadyEvent.class)
         public void onApplicationReady(ApplicationReadyEvent event) {
             try {
@@ -66,7 +67,11 @@ public class OrderSystemApplication {
                 boolean stop = server.awaitTermination(5, TimeUnit.SECONDS); // 等待最多 5秒
                 if (stop) {
                     logger.info("-------------main to match order------------------");
-                    List<Order> orderList = orderRepository.findAll();
+                    List<OrderMatchEntity> orderList = List.of();
+                    while(orderList.isEmpty()){
+                         orderList = orderRepository.findAll();
+                    }
+
                     orderList.forEach(order -> logger.info(order.toString()));
                     logger.info("finish");
                 }
@@ -91,17 +96,10 @@ public class OrderSystemApplication {
 
     private static void createTable() {
         try {
-            Connection conn = DriverManager.getConnection("jdbc:h2:mem:test", "sa", "password");
+            Connection conn = DriverManager.getConnection("jdbc:h2:mem:test", "sa", "");
             Statement stmt = conn.createStatement();
             stmt.execute("CREATE TABLE IF NOT EXISTS ORDERTABLE ( orderId INT AUTO_INCREMENT PRIMARY KEY , quantity INT  , priceType VARCHAR(10)," +
                     " price DECIMAL(15, 2) , buyOrderTime TIMESTAMP ,sellOrderTime TIMESTAMP , buyUserName VARCHAR(15) ,  sellUserName VARCHAR(15)  )");
-            stmt.execute("CREATE TABLE IF NOT EXISTS test (id INT PRIMARY KEY, name VARCHAR(255))");
-            stmt.execute("INSERT INTO TEST (id, name) VALUES (1, 'New Order')");
-            ResultSet rs = stmt.executeQuery("SELECT * FROM test");
-
-            while (rs.next()) {
-                logger.info("ID: {}, Name: {}", rs.getInt("id"), rs.getString("name"));
-            }
             stmt.close();
             conn.close();
         } catch (Exception e) {

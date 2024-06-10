@@ -11,9 +11,9 @@ import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
-public abstract class MatchEngine<T extends BaseOrder, U extends UseCase> {
+public abstract class MatchEngine<TBaseOrder extends BaseOrder, TUseCase extends UseCase> {
 
-    private U useCase;
+    private TUseCase useCase;
     private Executor executor = Executors.newFixedThreadPool(3);
     @Autowired
     private ApplicationContext applicationContext;
@@ -21,21 +21,21 @@ public abstract class MatchEngine<T extends BaseOrder, U extends UseCase> {
     private RedisLockService redisLockService;
 
 
-    private U getUseCase() {
+    private TUseCase getUseCase() {
         if (this.useCase == null) {
             this.useCase = applicationContext.getBean(getUseCaseClass());
         }
         return this.useCase;
     }
 
-    protected abstract Class<U> getUseCaseClass();
+    protected abstract Class<TUseCase> getUseCaseClass();
 
     /**
      * 這裡寫入2個物件如何匹配
      * obj1 主匹配
      * obj2 被匹配
      */
-    protected abstract boolean isMatch(T objT, T objU);
+    protected abstract boolean isMatch(TBaseOrder objT, TBaseOrder objU);
 
     /**
      *

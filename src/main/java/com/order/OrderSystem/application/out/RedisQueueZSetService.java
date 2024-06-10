@@ -1,7 +1,5 @@
 package com.order.OrderSystem.application.out;
 
-import com.order.OrderSystem.domain.RedisService;
-
 import java.util.Set;
 
 public interface RedisQueueZSetService<T> extends RedisService {

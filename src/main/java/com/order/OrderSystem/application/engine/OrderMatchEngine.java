@@ -5,6 +5,9 @@ import com.order.OrderSystem.application.out.OrderRepository;
 import com.order.OrderSystem.application.out.RedisQueueZSetService;
 import com.order.OrderSystem.domain.MatchEngine;
 import com.order.OrderSystem.domain.OrderMatchEntity;
+import lombok.AllArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -13,7 +16,9 @@ import java.util.List;
 import java.util.Set;
 
 @Component
+@AllArgsConstructor
 public class OrderMatchEngine extends MatchEngine<Order, OrderUseCase> {
+    private static final Logger logger = LoggerFactory.getLogger(OrderMatchEngine.class);
     // jpa db
     @Autowired
     OrderRepository orderRepository;
@@ -30,7 +35,7 @@ public class OrderMatchEngine extends MatchEngine<Order, OrderUseCase> {
      * 這裡給出上鎖後要做什麼事
      */
     @Override
-    protected Runnable lockAndRun(String lockQueueName) {
+    public Runnable lockAndRun(String lockQueueName) {
         return () -> matchAndSave(lockQueueName, getMatchData(lockQueueName));
     }
 
@@ -63,7 +68,7 @@ public class OrderMatchEngine extends MatchEngine<Order, OrderUseCase> {
     /*
      * 進行匹配
      * */
-    private void matchAndSave(String queueName, Set<Order> orders) {
+    public void matchAndSave(String queueName, Set<Order> orders) {
         List<Order> matchedData = new ArrayList<>();
         orders.forEach(obj1 -> {
             if (!matchedData.contains(obj1)) {
@@ -90,5 +95,6 @@ public class OrderMatchEngine extends MatchEngine<Order, OrderUseCase> {
         orderRepository.saveMatchOrder(new OrderMatchEntity(obj1, matchedObj)); //寫入db
         redisQueueZSetService.removeFromZSet(queueName, obj1);
         redisQueueZSetService.removeFromZSet(queueName, matchedObj); // 刪除queue上的資料
+        logger.info("Matched and saved order: {} with {}", obj1, matchedObj);
     }
 }

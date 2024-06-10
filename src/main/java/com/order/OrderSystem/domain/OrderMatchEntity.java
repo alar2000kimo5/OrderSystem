@@ -1,6 +1,7 @@
 package com.order.OrderSystem.domain;
 
 import com.order.OrderSystem.application.engine.Order;
+import com.order.OrderSystem.domain.type.InComeType;
 import com.order.OrderSystem.domain.type.PriceType;
 import jakarta.persistence.*;
 
@@ -24,7 +25,9 @@ public class OrderMatchEntity {
     private OrderMatchEntity() {
     }
 
-    public OrderMatchEntity(Order buy, Order sell) {
+    public OrderMatchEntity(Order order1, Order order2) {
+        Order buy = (order1.getInComeType() == InComeType.BUY) ? order1 : order2;
+        Order sell = (order1.getInComeType() == InComeType.SELL) ? order1 : order2;
         setBuyOrderTime(buy.getOrderTime());
         setBuyUserName(buy.getUserName());
         setSellOrderTime(sell.getOrderTime());
@@ -96,5 +99,19 @@ public class OrderMatchEntity {
 
     public void setPrice(BigDecimal price) {
         this.price = price;
+    }
+
+    @Override
+    public String toString() {
+        return "OrderMatchEntity{" +
+                "orderId=" + orderId +
+                ", quantity=" + quantity +
+                ", priceType=" + priceType +
+                ", price=" + price +
+                ", buyOrderTime=" + buyOrderTime +
+                ", sellOrderTime=" + sellOrderTime +
+                ", buyUserName='" + buyUserName + '\'' +
+                ", sellUserName='" + sellUserName + '\'' +
+                '}';
     }
 }
