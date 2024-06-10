@@ -5,6 +5,8 @@ import com.order.OrderSystem.application.out.OrderRepository;
 import com.order.OrderSystem.application.engine.Order;
 import com.order.OrderSystem.domain.type.InComeType;
 import com.order.OrderSystem.domain.type.PriceType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -28,6 +30,8 @@ import java.util.concurrent.TimeUnit;
 @EnableScheduling
 public class OrderSystemApplication {
 
+    private static final Logger logger = LoggerFactory.getLogger(OrderSystemApplication.class);
+
     public static void main(String[] args) {
         SpringApplication.run(OrderSystemApplication.class, args);
         createTable();
@@ -35,6 +39,8 @@ public class OrderSystemApplication {
 
     @Component
     public class ReadyAndRun {
+        private final Logger logger = LoggerFactory.getLogger(ReadyAndRun.class);
+
         @Autowired
         OrderUseCase orderUseCase;
         @Autowired
@@ -42,29 +48,30 @@ public class OrderSystemApplication {
 
         ExecutorService server = Executors.newFixedThreadPool(2);
 
+        //價格範圍
+        int priceScope = 100;
         @EventListener(ApplicationReadyEvent.class)
         public void onApplicationReady(ApplicationReadyEvent event) {
-
             try {
-                System.out.println("abc");
+                logger.info("Application is ready.");
                 // run random order
                 for (int i = 0; i < 20; i++) {
                     server.execute(() -> {
                         Order order = createOrder();
-                        System.out.println(order);
+                        logger.info("Created Order: {}", order);
                         orderUseCase.submit(order);
                     });
                 }
                 server.shutdown();
-                boolean stop = server.awaitTermination(5, TimeUnit.SECONDS); // 等待最多 1秒
+                boolean stop = server.awaitTermination(5, TimeUnit.SECONDS); // 等待最多 5秒
                 if (stop) {
-                    System.out.println("-------------main to match order------------------");
+                    logger.info("-------------main to match order------------------");
                     List<Order> orderList = orderRepository.findAll();
-                    orderList.forEach(System.out::println);
-                    System.out.println("finish");
+                    orderList.forEach(order -> logger.info(order.toString()));
+                    logger.info("finish");
                 }
             } catch (Exception e) {
-                e.printStackTrace();
+                logger.error("Exception occurred: ", e);
             }
         }
 
@@ -72,9 +79,9 @@ public class OrderSystemApplication {
 
         public Order createOrder() {
             Order order = new Order(InComeType.values()[random.nextInt(InComeType.values().length)], //
-                    random.nextInt(10) + 1, // 1-100
+                    random.nextInt(10) + 1, // 1-10
                     PriceType.values()[random.nextInt(PriceType.values().length)], //
-                    BigDecimal.valueOf(random.nextInt(10) + 1), // 0-100
+                    BigDecimal.valueOf(random.nextInt(priceScope) + 1), //價格範圍
                     new Timestamp(System.currentTimeMillis()) //
             );
             order.setUserName(UUID.randomUUID().toString().replace("-", "").substring(0, 8));
@@ -93,12 +100,12 @@ public class OrderSystemApplication {
             ResultSet rs = stmt.executeQuery("SELECT * FROM test");
 
             while (rs.next()) {
-                System.out.println(rs.getInt("id") + ", " + rs.getString("name"));
+                logger.info("ID: {}, Name: {}", rs.getInt("id"), rs.getString("name"));
             }
             stmt.close();
             conn.close();
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("Exception occurred while creating table: ", e);
         }
     }
 }
