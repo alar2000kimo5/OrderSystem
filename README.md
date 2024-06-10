@@ -27,7 +27,7 @@ README file
 # 資料流程
 ![image](https://github.com/alar2000kimo5/OrderSystem/assets/79575202/69f8cdcf-1fa8-4abc-baae-eba3675834c5)
 
-# CLASS UML
+# CLASSUML
 ![OrderSystemUML](https://github.com/alar2000kimo5/OrderSystem/assets/79575202/c84e5212-a186-49cb-8a68-eac03025bdae)
 
 
