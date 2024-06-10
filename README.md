@@ -28,7 +28,8 @@ README file
 ![image](https://github.com/alar2000kimo5/OrderSystem/assets/79575202/69f8cdcf-1fa8-4abc-baae-eba3675834c5)
 
 # CLASS UML
-![OrderSystemUML](https://github.com/alar2000kimo5/OrderSystem/assets/79575202/aceb8f19-4df4-4fc6-95ed-4cdb68aa0e66)
+![OrderSystemUML](https://github.com/alar2000kimo5/OrderSystem/assets/79575202/c84e5212-a186-49cb-8a68-eac03025bdae)
+
 
 # Redis
 使用dockerDesktop 安裝redis
