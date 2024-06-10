@@ -5,7 +5,6 @@ import com.order.OrderSystem.application.out.OrderRepository;
 import com.order.OrderSystem.application.out.RedisQueueZSetService;
 import com.order.OrderSystem.domain.MatchEngine;
 import com.order.OrderSystem.domain.OrderMatchEntity;
-import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +15,6 @@ import java.util.List;
 import java.util.Set;
 
 @Component
-@AllArgsConstructor
 public class OrderMatchEngine extends MatchEngine<Order, OrderUseCase> {
     private static final Logger logger = LoggerFactory.getLogger(OrderMatchEngine.class);
     // jpa db
@@ -24,6 +22,12 @@ public class OrderMatchEngine extends MatchEngine<Order, OrderUseCase> {
     OrderRepository orderRepository;
     @Autowired
     RedisQueueZSetService redisQueueZSetService;
+
+    @Autowired
+    public OrderMatchEngine(OrderRepository orderRepository, RedisQueueZSetService redisQueueZSetService) {
+        this.orderRepository = orderRepository;
+        this.redisQueueZSetService = redisQueueZSetService;
+    }
 
     @Override
     protected Class<OrderUseCase> getUseCaseClass() {
