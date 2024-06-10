@@ -1,8 +1,8 @@
 package com.order.OrderSystem;
 
+import com.order.OrderSystem.application.engine.Order;
 import com.order.OrderSystem.application.in.OrderUseCase;
 import com.order.OrderSystem.application.out.OrderRepository;
-import com.order.OrderSystem.application.engine.Order;
 import com.order.OrderSystem.domain.OrderMatchEntity;
 import com.order.OrderSystem.domain.type.InComeType;
 import com.order.OrderSystem.domain.type.PriceType;
@@ -18,8 +18,10 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
-import java.sql.*;
-import java.util.List;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.Statement;
+import java.sql.Timestamp;
 import java.util.Random;
 import java.util.UUID;
 import java.util.concurrent.ExecutorService;
@@ -64,17 +66,11 @@ public class OrderSystemApplication {
                     });
                 }
                 server.shutdown();
-                boolean stop = server.awaitTermination(5, TimeUnit.SECONDS); // 等待最多 5秒
+                boolean stop = server.awaitTermination(10, TimeUnit.SECONDS);
                 if (stop) {
-                    logger.info("-------------main to match order------------------");
-                    List<OrderMatchEntity> orderList = List.of();
-                    while(orderList.isEmpty()){
-                         orderList = orderRepository.findAll();
-                    }
-
-                    orderList.forEach(order -> logger.info(order.toString()));
-                    logger.info("finish");
+                    logger.info("----------------------------------------");
                 }
+
             } catch (Exception e) {
                 logger.error("Exception occurred: ", e);
             }
