@@ -13,7 +13,6 @@ import java.util.concurrent.Executors;
 
 public abstract class MatchEngine<T extends BaseOrder, U extends UseCase> {
 
-    private Class<U> useCaseClass;
     private U useCase;
     private Executor executor = Executors.newFixedThreadPool(3);
     @Autowired
@@ -21,16 +20,15 @@ public abstract class MatchEngine<T extends BaseOrder, U extends UseCase> {
     @Autowired
     private RedisLockService redisLockService;
 
-    public MatchEngine(Class<U> useCaseClass) {
-        this.useCaseClass = useCaseClass;
-    }
 
     private U getUseCase() {
         if (this.useCase == null) {
-            this.useCase = applicationContext.getBean(useCaseClass);
+            this.useCase = applicationContext.getBean(getUseCaseClass());
         }
         return this.useCase;
     }
+
+    protected abstract Class<U> getUseCaseClass();
 
     /**
      * 這裡寫入2個物件如何匹配

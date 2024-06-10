@@ -1,8 +1,7 @@
 package com.order.OrderSystem.application.in;
 
-import com.order.OrderSystem.application.out.RedisQueueZSetService;
 import com.order.OrderSystem.application.engine.Order;
-import com.order.OrderSystem.domain.RedisService;
+import com.order.OrderSystem.application.out.RedisQueueZSetService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -42,10 +41,5 @@ public class OrderUseCase implements UseCase<Order, String>{
     @Override
     public List<String> getQueueNames() {
         return Arrays.asList(QUEUE_NAME_30,QUEUE_NAME_60,QUEUE_NAME_end);
-    }
-
-    @Override
-    public RedisService getRedisService() {
-        return redisQueueZSetService;
     }
 }

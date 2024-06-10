@@ -20,18 +20,20 @@ public class OrderMatchEngine extends MatchEngine<Order, OrderUseCase> {
     @Autowired
     RedisQueueZSetService redisQueueZSetService;
 
-    OrderMatchEngine(Class<OrderUseCase> useCaseClass) {
-        super(useCaseClass);
+    @Override
+    protected Class<OrderUseCase> getUseCaseClass() {
+        return OrderUseCase.class;
     }
 
     /**
      * 父層metchEngine會依照給出的queue，多緒上鎖後呼叫Runnable方法
      * 這裡給出上鎖後要做什麼事
-     * */
+     */
     @Override
     protected Runnable lockAndRun(String lockQueueName) {
         return () -> matchAndSave(lockQueueName, getMatchData(lockQueueName));
     }
+
     /**
      * 這裡寫入2個物件如何匹配
      * obj1 主匹配
@@ -47,6 +49,7 @@ public class OrderMatchEngine extends MatchEngine<Order, OrderUseCase> {
                 && obj1.getPriceType().equals(obj2.getPriceType())
                 && obj1.getPrice().equals(obj2.getPrice());
     }
+
     /**
      * 這裡處理匹配後要做事，此例為：1.寫入db 2.刪除queue上的資料
      * queueName 當下拿到資料的queueName
@@ -58,8 +61,8 @@ public class OrderMatchEngine extends MatchEngine<Order, OrderUseCase> {
     }
 
     /*
-    * 進行匹配
-    * */
+     * 進行匹配
+     * */
     private void matchAndSave(String queueName, Set<Order> orders) {
         List<Order> matchedData = new ArrayList<>();
         orders.forEach(obj1 -> {

@@ -1,5 +1,7 @@
 package com.order.OrderSystem.domain.base;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.order.OrderSystem.domain.type.InComeType;
 import com.order.OrderSystem.domain.type.PriceType;
 
@@ -15,9 +17,13 @@ public abstract class BaseOrder implements Serializable {
     private BigDecimal price;
     private Timestamp orderTime;
 
-    public BaseOrder() {
-    }
-    public BaseOrder(InComeType inComeType, int quantity, PriceType priceType, BigDecimal price, Timestamp orderTime) {
+    @JsonCreator
+    public BaseOrder(
+            @JsonProperty("inComeType") InComeType inComeType,
+            @JsonProperty("quantity") int quantity,
+            @JsonProperty("priceType") PriceType priceType,
+            @JsonProperty("price") BigDecimal price,
+            @JsonProperty("orderTime") Timestamp orderTime) {
         this.inComeType = inComeType;
         this.quantity = quantity;
         this.priceType = priceType;

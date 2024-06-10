@@ -1,5 +1,7 @@
 package com.order.OrderSystem.application.engine;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.order.OrderSystem.domain.base.BaseOrder;
 import com.order.OrderSystem.domain.type.InComeType;
 import com.order.OrderSystem.domain.type.PriceType;
@@ -11,7 +13,13 @@ public class Order extends BaseOrder {
 
     String userName;
 
-    public Order(InComeType inComeType, int quantity, PriceType priceType, BigDecimal price, Timestamp orderTime) {
+    @JsonCreator
+    public Order(
+            @JsonProperty("inComeType") InComeType inComeType,
+            @JsonProperty("quantity") int quantity,
+            @JsonProperty("priceType") PriceType priceType,
+            @JsonProperty("price") BigDecimal price,
+            @JsonProperty("orderTime") Timestamp orderTime) {
         super(inComeType, quantity, priceType, price, orderTime);
     }
 
