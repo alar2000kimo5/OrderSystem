@@ -19,6 +19,7 @@ README file
 - [設計架檔](#設計架構)
 - [資料流程](#資料流程)
 - [CLASS UML](#CLASSUML)
+- [Test](#Test)
 - [Redis](#Redis)
 
 # 設計架構
@@ -29,6 +30,12 @@ README file
 
 # CLASSUML
 ![OrderSystemUML](https://github.com/alar2000kimo5/OrderSystem/assets/79575202/c84e5212-a186-49cb-8a68-eac03025bdae)
+
+# Test
+order
+![image](https://github.com/alar2000kimo5/OrderSystem/assets/79575202/f92a5ad3-2338-44ab-bdea-e6c48bb7cce0)
+match
+![image](https://github.com/alar2000kimo5/OrderSystem/assets/79575202/f23a8217-4448-48fd-b08b-381fe3dac2e8)
 
 
 # Redis
