@@ -34,15 +34,15 @@ README file
 |-----------------|-------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------|
 | 介面層          | `src/test/java/com/order/OrderSystem/adapter/`              | clean 架構中隔離效果 adapter/in 主要為controller 進行request/response資料轉換，adapter/out 為 application/out 隔離第三方行為實作                         |                                   
 | 應用層          | `src/main/java/com/order/OrderSystem/application/`           |應用邏輯，包括訂單匹配引擎、訂單實作用例。                                                                                                             |
-| 引擎包          | `src/main/java/com/order/OrderSystem/application/engine/`   | 包含 `OrderMatchEngine.java`，`Order.java`，實現訂單和訂單匹配引擎邏輯。                                                                                |
-| 用例包        | `src/main/java/com/order/OrderSystem/application/in/`       | 包含 `OrderUseCase.java` 實現應用用例。                                                                                          |
-| 應用介面包          | `src/main/java/com/order/OrderSystem/application/out/`      | 此包內部只有介面提供給應用層使用 `OrderRepository.java`、`RedisLockService.java`、`RedisQueueZSetService.java` 和 `RedisService.java`，處理數據存取和Redis服務。                 |
-| 域層            | `src/main/java/com/order/OrderSystem/domain/`               | 定義和實現資料類，包括抽象匹配引擎類 `MatchEngine.java`、應用介面類 `UseCase.java`、訂單抽象類 `Order.java` 和實現資料類 `OrderMatchEntity.java`。  |
-| 基礎域類別包    | `src/main/java/com/order/OrderSystem/domain/base/`          | 包含 `BaseOrder.java`，定義訂單的基礎結構。                                                                                                              |
-| 類型定義包      | `src/main/java/com/order/OrderSystem/domain/type/`          | 包含 `InComeType.java` 和 `PriceType.java`，定義買賣、市價或限價類。                                                                                               |
-| 配置包          | `src/main/java/com/order/OrderSystem/springconfig/`         | 包含 `RedisConfig.java`，配置 Spring 和 Redis 的相關設置。                                                                                               |
-| 資源目錄        | `src/main/resources/`                                       | 包含 `application.properties`，應用程序的配置文件。                                                                                                      |
-| 測試目錄        | `src/test/java/com/order/OrderSystem/`                      | 包含測試代碼，如 `BaseOrderSystemApplicationTests.java`，`RedisLockServiceImplTest.java`，`RedisQueueZSetServiceImplTest.java`，`OrderMatchEngineTest.java`。 |
+| 引擎包          | `src/main/java/com/order/OrderSystem/application/engine/`   | 實作，`OrderMatchEngine.java`，`Order.java`，訂單和訂單匹配引擎邏輯。                                                                                |
+| 用例包        | `src/main/java/com/order/OrderSystem/application/in/`          |實作，`OrderUseCase.java` 實現應用用例。                                                                                          |
+| 應用介面包          | `src/main/java/com/order/OrderSystem/application/out/`   | 定義，此包內部只有介面提供給應用層使用 `OrderRepository.java`、`RedisLockService.java`、`RedisQueueZSetService.java` 和 `RedisService.java`，處理數據存取和Redis服務。                 |
+| 域層            | `src/main/java/com/order/OrderSystem/domain/`               | 定義，包括抽象匹配引擎類 `MatchEngine.java`、應用介面類 `UseCase.java`、訂單抽象類 `Order.java` 和實現資料類 `OrderMatchEntity.java`。  |
+| 基礎域類別包    | `src/main/java/com/order/OrderSystem/domain/base/`          | 定義 `BaseOrder.java`，定義訂單的基礎結構。                                                                                                              |
+| 類型定義包      | `src/main/java/com/order/OrderSystem/domain/type/`          | 定義 `InComeType.java` 和 `PriceType.java`，定義買賣、市價或限價類。                                                                                               |
+| 配置包          | `src/main/java/com/order/OrderSystem/springconfig/`         | 實作 `RedisConfig.java`，配置 Spring 和 Redis 的相關設置。                                                                                               |
+| 資源目錄        | `src/main/resources/`                                       | `application.properties`，應用程序的配置文件。                                                                                                      |
+| 測試目錄        | `src/test/java/com/order/OrderSystem/`                      | 實作測試代碼，如 `BaseOrderSystemApplicationTests.java`，`RedisLockServiceImplTest.java`，`RedisQueueZSetServiceImplTest.java`，`OrderMatchEngineTest.java`。 |
 
 
 # CLASSUML
