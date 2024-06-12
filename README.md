@@ -31,8 +31,7 @@ README file
 
 # 設計理念
 - 由外部reqeust進入usecase，在usecase會分依照屬性分配到某個redis 上的queue。
-- 屬性可以是以價錢的範圍切分，切分法也可以除以7，分為整除、餘數1~6
-- 或者屬性以單號區分範圍切分
+- 屬性可以是以價錢的範圍切分，這樣先進來的匹配條件就會落在同一個價錢範圍中
 - matchEngine會依照usecase介面中提供的實作方法得到總共有幾個queue要拿下來做匹配處理
 - metchEngine每秒會發送多執行緒至redis取得資料
 - 假如有三台server，redis有三個queue、設定每個執行緒取得鎖的等待時間不同來避免同一台一直處理事情的問題
