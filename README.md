@@ -73,6 +73,9 @@ Zrange orderQueue30 0 -1 withscores
 - 在orderMatchEngine isMatch 匹配的效率，foreach 時匹配到就可以中斷迴圈，並可開始通知寫入db匹配資料動作，與刪除redis資料動作
 - 寫入db匹配與刪除或更新redis資料動作可由另一個服務處理，並在中間使用queue來做介接
 - 如果一開始送到usecase的資料在送往redis前就掉資料，有什麼辦法處理呢？
+- 嘗試使用k8s建立image並部署
+- 嘗試使用 golang
+  
   
 
 
