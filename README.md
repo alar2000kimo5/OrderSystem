@@ -67,7 +67,12 @@ match
 docker exec -it redis redis-cli
 Zrange orderQueue30 0 -1 withscores
 
-
+# 延伸問題
+- 能做到分批匹配的狀況嗎？例如：A買家買10單位、B賣家賣6單位、C賣家賣4單位 ，怎麼做到？
+- 另一個狀況如果A買家10單位、B賣家6單位，匹配完成功，B賣家還有4單位，需要更新回redis
+- 在orderMatchEngine isMatch 匹配的效率，foreach 時匹配到就可以中斷迴圈，並可開始通知寫入db匹配資料動作，與刪除redis資料動作
+- 寫入db匹配與刪除或更新redis資料動作可由另一個服務處理，並在中間使用queue來做介接
+  
 
 
 
